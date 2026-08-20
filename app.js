@@ -133,8 +133,6 @@ const editItem = (e) => {
     submitBtn.textContent = 'edit'
 }
 
-
-
 //Delete Item
 const deleteItem = (e) => {
     const element = e.currentTarget.parentElement.parentElement
@@ -157,7 +155,18 @@ const deleteItem = (e) => {
 
 //LOCAL STORAGE
 const addToLocalStorage = (id, value) => {
-    console.log("Add to local storage")
+    //const grocery = {id:id, value:value} 
+    const grocery = { id, value } //ES6 shorthand for same names
+    console.log(grocery)
+    let items = localStorage.getItem('list') 
+                ? JSON.parse(localStorage.getItem('list')) 
+                : []
+
+    console.log(items)
+    items.push(grocery)
+    localStorage.setItem('list', JSON.stringify(items))
+
+
 }
 
 const editLocalStorage = (id, value) => {
@@ -167,3 +176,12 @@ const editLocalStorage = (id, value) => {
 const removeFromLocalStorage = id => {
     console.log(id)
 }
+
+//setItem
+//localStorage.setItem('orange', JSON.stringify(['item1', 'item2']))
+
+//getItem
+//const oranges = JSON.parse(localStorage.getItem('oranges'))
+
+//removeItem
+//localStorage.removeItem('orange')
