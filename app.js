@@ -25,31 +25,8 @@ const addItem = e => {
     const id = new Date().getTime().toString()
     
     if(value && !editFlag){
-        const element = document.createElement('article')
-
-        //add class
-        element.classList.add('grocery-item')
-
-        //add id
-        const attr = document.createAttribute('data-id')
-        attr.value = id
-        element.setAttributeNode(attr)
-
-        //add HTML
-        element.innerHTML = `<p class="title">${value}</p>
-                    <div class="btn-container">
-                        <button type="button" class="edit-btn">edit</button>
-                        <button type="button" class="delete-btn">delete</button>
-                    </div>
-        `
-        //Access deleteBtn and editBtn from the dynamic iten
-        const deleteBtn = element.querySelector('.delete-btn')
-        const editBtn = element.querySelector('.edit-btn')
-        deleteBtn.addEventListener('click', deleteItem)
-        editBtn.addEventListener('click', editItem)
-
-        //append child to list
-        list.appendChild(element)
+        //Create items
+        createListItem(id, value)
         //display alert
         displayAlert('item added to the list', 'success')
         //show container
@@ -143,14 +120,33 @@ const setBackToDefault = () => {
      submitBtn.textContent = 'submit'
 }
 
+const createListItem = (id, value) => {
+    const element = document.createElement('article')
 
-//EVENT LISTENERS
+    //add class
+    element.classList.add('grocery-item')
 
-//Submit Form
-form.addEventListener('submit', addItem)
+    //add id
+    const attr = document.createAttribute('data-id')
+    attr.value = id
+    element.setAttributeNode(attr)
 
-//Clear Items
-clearBtn.addEventListener('click', clearItems)
+    //add HTML
+    element.innerHTML = `<p class="title">${value}</p>
+                <div class="btn-container">
+                    <button type="button" class="edit-btn">edit</button>
+                    <button type="button" class="delete-btn">delete</button>
+                </div>
+    `
+    //Access deleteBtn and editBtn from the dynamic iten
+    const deleteBtn = element.querySelector('.delete-btn')
+    const editBtn = element.querySelector('.edit-btn')
+    deleteBtn.addEventListener('click', deleteItem)
+    editBtn.addEventListener('click', editItem)
+
+    //append child to list
+    list.appendChild(element)
+}
 
 
 //LOCAL STORAGE
@@ -203,3 +199,28 @@ const getLocalStorage = () => {
 
 //removeItem
 //localStorage.removeItem('orange')
+
+//SETUP ITEMS
+const setupItems = () => {
+    let items = getLocalStorage()
+    if(items.length >0){
+        items.forEach(item => {
+            createListItem(item.id, item.value)
+        })
+    }
+
+    container.classList.add('show-container')
+}
+
+
+//EVENT LISTENERS
+
+//Submit Form
+form.addEventListener('submit', addItem)
+
+//Clear Items
+clearBtn.addEventListener('click', clearItems)
+
+//Load Items
+window.addEventListener('DOMContentLoaded', setupItems)
+
