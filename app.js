@@ -72,52 +72,6 @@ const addItem = e => {
     }
 }
 
-//Display Alert
-const displayAlert = (text, action) => {
-    alert.textContent = text
-    alert.classList.add(`alert-${action}`)
-    
-    //Remove alert
-    setTimeout(()=>{
-        alert.textContent = ''
-        alert.classList.remove(`alert-${action}`)
-    }, 1000)
-
-}
-
-//Clear items
-const clearItems = () => {
-
-    //Select all your grocery items in the list
-    const items = document.querySelectorAll('.grocery-item')
-    
-    //If node is not empty, grab each child and remove from list
-    if(items.length > 0){
-        items.forEach(item => list.removeChild(item))
-    }
-
-    //hide container
-    container.classList.remove('show-container')
-    displayAlert('empty list', 'danger')
-    setBackToDefault()
-}
-
-//Set back to default
-const setBackToDefault = () => {
-     grocery.value = ''
-     editFlag = false
-     editID = ''
-     submitBtn.textContent = 'submit'
-}
-
-
-//EVENT LISTENERS
-
-//Submit Form
-form.addEventListener('submit', addItem)
-
-//Clear Items
-clearBtn.addEventListener('click', clearItems)
 
 //Edit Item
 const editItem = (e) => {
@@ -151,6 +105,53 @@ const deleteItem = (e) => {
     removeFromLocalStorage(id)
 }
 
+//Clear items
+const clearItems = () => {
+
+    //Select all your grocery items in the list
+    const items = document.querySelectorAll('.grocery-item')
+    
+    //If node is not empty, grab each child and remove from list
+    if(items.length > 0){
+        items.forEach(item => list.removeChild(item))
+    }
+
+    //hide container
+    container.classList.remove('show-container')
+    displayAlert('empty list', 'danger')
+    setBackToDefault()
+    localStorage.removeItem('list')
+}
+//Display Alert
+const displayAlert = (text, action) => {
+    alert.textContent = text
+    alert.classList.add(`alert-${action}`)
+    
+    //Remove alert
+    setTimeout(()=>{
+        alert.textContent = ''
+        alert.classList.remove(`alert-${action}`)
+    }, 1000)
+
+}
+
+//Set back to default
+const setBackToDefault = () => {
+     grocery.value = ''
+     editFlag = false
+     editID = ''
+     submitBtn.textContent = 'submit'
+}
+
+
+//EVENT LISTENERS
+
+//Submit Form
+form.addEventListener('submit', addItem)
+
+//Clear Items
+clearBtn.addEventListener('click', clearItems)
+
 
 //LOCAL STORAGE
 const addToLocalStorage = (id, value) => {
@@ -164,7 +165,16 @@ const addToLocalStorage = (id, value) => {
 }
 
 const editLocalStorage = (id, value) => {
+    let items = getLocalStorage()
+    items = items.map((item) => {
+        if(item.id === id){
+            item.value = value
+        }
+        return item
+    })
 
+    localStorage.setItem('list', JSON.stringify(items))
+    console.log(getLocalStorage())
 }
 
 const removeFromLocalStorage = id => {
