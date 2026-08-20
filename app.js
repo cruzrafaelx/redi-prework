@@ -146,7 +146,6 @@ const deleteItem = (e) => {
 
     displayAlert('item removed', 'danger')
     setBackToDefault()
-    removeFromLocalStorage()
 
     //remove from local storage
     removeFromLocalStorage(id)
@@ -157,16 +156,11 @@ const deleteItem = (e) => {
 const addToLocalStorage = (id, value) => {
     //const grocery = {id:id, value:value} 
     const grocery = { id, value } //ES6 shorthand for same names
-    console.log(grocery)
-    let items = localStorage.getItem('list') 
-                ? JSON.parse(localStorage.getItem('list')) 
-                : []
+    let items = getLocalStorage()
 
     console.log(items)
     items.push(grocery)
     localStorage.setItem('list', JSON.stringify(items))
-
-
 }
 
 const editLocalStorage = (id, value) => {
@@ -174,7 +168,21 @@ const editLocalStorage = (id, value) => {
 }
 
 const removeFromLocalStorage = id => {
-    console.log(id)
+    let items = getLocalStorage()
+    //If the item's id is not equal to the passed item's id, filter it out
+    items = items.filter((item) => {
+        if(item.id !== id){
+            return item
+        }
+    })
+
+    localStorage.setItem('list', JSON.stringify(items))
+}
+
+const getLocalStorage = () => {
+    return localStorage.getItem('list') 
+    ? JSON.parse(localStorage.getItem('list')) 
+    : []
 }
 
 //setItem
